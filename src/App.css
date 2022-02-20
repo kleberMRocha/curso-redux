@@ -1,6 +1,7 @@
 .App-header {
   background-color: #4b515e;
-  min-height: 100vh;
+  min-height: 200px;
+  border-bottom: 8px solid #30353f;
 }
 
 @keyframes entrance {
@@ -17,4 +18,22 @@
   margin: auto;
   left: 0;
   right: 0;
+}
+
+@keyframes move {
+  to {
+    background-position-x: -800px;
+  }
+}
+.pokemons-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: auto;
+  height: 100vh;
+  background: url(./assets/bg_2.png);
+  background-position-y: -150px;
+  background-size: cover;
+  padding: 8px;
+  animation: move 70s linear infinite alternate forwards;
 }

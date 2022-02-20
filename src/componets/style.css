@@ -1,0 +1,64 @@
+.card {
+  display: grid;
+  align-self: flex-start;
+  text-align: center;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.1fr 1fr 0.1fr;
+  border: 1px solid #81aaf5;
+  border-radius: 8px;
+  width: 300px;
+  margin: 8px;
+  background: #ffffff url(../assets/bg.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  box-shadow: 2px 2px 3px #35353548;
+}
+.card span > h2 {
+  color: #112d61;
+}
+@keyframes zoom {
+  to {
+    transform: scale(1.1);
+  }
+}
+.card img {
+  min-width: 150px;
+  margin: 0 auto;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.card img:hover {
+  animation: zoom 0.5s ease-in forwards;
+}
+.card .card-type {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 8px;
+}
+.card-like-Container {
+  background: #81aaf5;
+  padding: 2px;
+}
+.card-like-Container h4 {
+  color: #112d61;
+}
+
+.card-btns {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+.card-btns button {
+  padding: 12px;
+  border: 1px solid #81aaf5;
+  background: #dae4f8;
+  border-radius: 4px;
+  transition: 0.5s;
+  width: 80%;
+}
+
+.card-btns button:hover {
+  background: #ffffff;
+}
