@@ -51,6 +51,11 @@
   margin: 8px 0;
 }
 .card-btns button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: #112d61;
   padding: 12px;
   border: 1px solid #81aaf5;
   background: #dae4f8;
