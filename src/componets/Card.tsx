@@ -10,7 +10,6 @@ export const Card:React.FC = () => {
     const pokemons = useSelector<IState, IPokemon[]>(state => state.pokemon);
     const dispatch = useDispatch();
 
-   
     const url = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png';
     const mock = {
         img:url, 

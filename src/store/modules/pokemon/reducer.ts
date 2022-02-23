@@ -15,9 +15,10 @@ const initialState:IPokemon[] = [] as IPokemon[] ;
 const pokemon:Reducer<IPokemon[]> = (state = initialState, action) => {
     const {type, payload } = action;
 
-    const addOrRemove = (act: boolean) => {
+    const handleLikes = (act: boolean) => {
         const newState = state.map(p => {
-            if(p.name === payload.name){
+            const { name } = payload;
+            if(p.name === name){
                 act ?  p.like+= 1 : p.deslike+= 1
             }
             return p;
@@ -25,15 +26,21 @@ const pokemon:Reducer<IPokemon[]> = (state = initialState, action) => {
         return newState;
     };
 
-    console.log(state);
+    const handleAdd = (pokemon:IPokemon) => {
+      const hasPokemon = state.find(p => p.name === pokemon.name);
+      if(!hasPokemon){
+        return [...state, pokemon]
+      }
+      return state;
+    };
 
     switch (type) {
         case 'ADD_POKEMON':
-          return [...state, payload]
+          return handleAdd(payload);
         case 'LIKE_POKEMON':
-          return addOrRemove(true);
+          return handleLikes(true);
         case 'DESLIKE_POKEMON':
-            return addOrRemove(false);
+            return handleLikes(false);
         default:
           return state;
       }
