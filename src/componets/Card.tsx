@@ -1,6 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  ButtonHTMLAttributes,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { FiThumbsUp, FiThumbsDown,FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import {
+  FiThumbsUp,
+  FiThumbsDown,
+  FiArrowLeft,
+  FiArrowRight,
+} from 'react-icons/fi';
 import './style.css';
 import {
   addPokemon,
@@ -19,38 +30,39 @@ export const Card: React.FC = () => {
   const [pokemon, setPokeon] = useState({} as IPokemon);
   const [numberPokemon, setNumber] = useState(1);
 
-interface IPayLoadPoekon {
+  const btnDesLike: React.MutableRefObject<any> = useRef(null);
+  const btnLike: React.MutableRefObject<any> = useRef(null);
+
+  interface IPayLoadPoekon {
     id: number;
     name: string;
-    types: { type: { name: string }}[];
+    types: { type: { name: string } }[];
     sprites: {
-        front_default: string;
-    }
-}
+      front_default: string;
+    };
+  }
 
-  const capitalizeFirstLetter = (name:string) => {
-  const letters = name.split('');
-  return letters.map((l,i) => i === 0 ? l.toUpperCase() : l ).join('');
+  const capitalizeFirstLetter = (name: string) => {
+    const letters = name.split('');
+    return letters.map((l, i) => (i === 0 ? l.toUpperCase() : l)).join('');
   };
-  const formatPokeon = ({ name, types, sprites, id }:IPayLoadPoekon) => {
+  const formatPokeon = ({ name, types, sprites, id }: IPayLoadPoekon) => {
     const pokeon: IPokemon = {
-        id,
-        deslike: 0,
-        like: 0,
-        img: sprites.front_default,
-        name: capitalizeFirstLetter(name),
-        type: types
-          .map((t: { type: { name: string } }) => t.type.name)
-          .join(','),
-      };
+      id,
+      deslike: 0,
+      like: 0,
+      img: sprites.front_default,
+      name: capitalizeFirstLetter(name),
+      type: types.map((t: { type: { name: string } }) => t.type.name).join(','),
+    };
 
-      return pokeon;
+    return pokeon;
   };
 
   useEffect(() => {
-    const hasPokemon = pokemons.find(p => p.id === numberPokemon);
+    const hasPokemon = pokemons.find((p) => p.id === numberPokemon);
 
-    if(hasPokemon){
+    if (hasPokemon) {
       setPokeon(hasPokemon);
       return;
     }
@@ -60,38 +72,56 @@ interface IPayLoadPoekon {
     });
   }, [numberPokemon]);
 
+  const setAnimation = (action: 'like' | 'deslike') => {
+    const ref = action === 'like' ? btnLike : btnDesLike;
+    ref.current.classList = ['spin-btn-ant'];
+    setTimeout(() => {
+      ref.current.classList = [''];
+    }, 1000);
+  };
+
   const handleAddPokemon = useCallback(
     (pokeon: IPokemon, action: 'like' | 'deslike' | 'next' | 'previous') => {
-        setNumber((old) => {
-            const next = old+=1;
-            return Number(next)
-        })
+      if (action === 'like' || action === 'deslike') {
+        setAnimation(action);
+      }
+
       dispatch(addPokemon(pokeon));
-      action === 'like'
-        ? dispatch(likePokesmon(pokeon))
-        : dispatch(deslikePokemon(pokeon));
+        action === 'like'
+          ? dispatch(likePokesmon(pokeon))
+          : dispatch(deslikePokemon(pokeon));
+
+      setTimeout(() => {
+        setNumber((old) => {
+          const next = (old += 1);
+          return Number(next);
+        });
+      }, 1500);
     },
     [dispatch]
   );
 
-  const handleNextPrevious = (act:boolean) => {
-
-    if(numberPokemon === 1 && !act){
+  const handleNextPrevious = (act: boolean) => {
+    if (numberPokemon === 1 && !act) {
       return;
     }
 
     let nPokemon = Number(numberPokemon);
-    const next = act ? nPokemon+=1 : nPokemon-=1;
+    const next = act ? (nPokemon += 1) : (nPokemon -= 1);
 
     setNumber(Number(next));
   };
 
   return (
     <div className="card">
-        <div className='selectorContainer'>
-            <button type='button' onClick={() => handleNextPrevious(false)}><FiArrowLeft/></button>
-            <button type='button' onClick={() => handleNextPrevious(true)}><FiArrowRight /></button>
-        </div>
+      <div className="selectorContainer">
+        <button type="button" onClick={() => handleNextPrevious(false)}>
+          <FiArrowLeft />
+        </button>
+        <button type="button" onClick={() => handleNextPrevious(true)}>
+          <FiArrowRight />
+        </button>
+      </div>
       {pokemon.name ? (
         <>
           <span>
@@ -99,11 +129,9 @@ interface IPayLoadPoekon {
           </span>
           <img src={pokemon.img} />
           <div className="card-type">
-            {
-                pokemon.type.split(',').map(t => {
-                    return <span key={t}>{t}</span>
-                })
-            }
+            {pokemon.type.split(',').map((t) => {
+              return <span key={t}>{t}</span>;
+            })}
           </div>
           <div className="card-like-Container">
             <span>
@@ -111,12 +139,14 @@ interface IPayLoadPoekon {
             </span>
             <div className="card-btns">
               <button
+                ref={btnLike}
                 type="button"
                 onClick={() => handleAddPokemon(pokemon, 'like')}
               >
                 <FiThumbsUp color="green" /> {pokemon.like}
               </button>
               <button
+                ref={btnDesLike}
                 type="button"
                 onClick={() => handleAddPokemon(pokemon, 'deslike')}
               >

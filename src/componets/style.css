@@ -51,6 +51,16 @@
   gap: 8px;
   margin: 8px 0;
 }
+
+@keyframes spinBtn {
+  from {
+    transform: rotateX(150deg);
+  }
+}
+.spin-btn-ant {
+  animation: 1s spinBtn infinite alternate;
+}
+
 .card-btns button {
   display: flex;
   justify-content: center;
